@@ -1,5 +1,14 @@
 import http from 'k6/http';
 import { sleep } from 'k6';
+import { Trend, Counter } from 'k6/metrics';
+
+let firstTrend = new Trend('CUSTOM_root_duration');
+let secondTrend = new Trend('CUSTOM_contacts_duration');
+
+let firstTrendCounter = new Counter('CUSTOM_root_count');
+let secondTrendCounter = new Counter('CUSTOM_contacts_count');
+let myCounter = new Counter('my_counter');
+
 
 export let options = {
     scenarios: {
@@ -7,17 +16,17 @@ export let options = {
             executor: 'constant-arrival-rate',
             rate: 60,
             timeUnit: '1m', // 90 iterations per minute, i.e. 1.5 RPS
-            duration: '1m',
+            duration: '10s',
             preAllocatedVUs: 10, // the size of the VU (i.e. worker) pool for this scenario
-            exec: 'webtest', // this scenario is executing different code than the one above!
+            exec: 'contacts', // this scenario is executing different code than the one above!
         },
         my_api_test_1: {
             executor: 'constant-arrival-rate',
             rate: 120,
             timeUnit: '1m', // 90 iterations per minute, i.e. 1.5 RPS
-            duration: '1m',
+            duration: '10s',
             preAllocatedVUs: 10, 
-            exec: 'apitest', 
+            exec: 'root', 
         },
     },
     discardResponseBodies: true,
@@ -26,11 +35,20 @@ export let options = {
 
     },
 };
+export function contacts() {
+    let res =  http.get('https://test.k6.io/contacts.php');
+    secondTrend.add(res.timings.duration);
+    secondTrendCounter.add(1);
+ }
 
-export function webtest() {
-    http.get('https://test.k6.io/');
+export function root() {
+   let res =  http.get('https://test.k6.io/');
+   firstTrend.add(res.timings.duration);
+   firstTrendCounter.add(1);
 }
 
-export function apitest() {
-    http.get('https://test.k6.io/contacts.php');
-}
+// git init
+// git add file
+// git commit -m "sdsd"
+// git remote add origin ssh:git@github.com-otus:eszhlznkv/loadtest_otus.git
+// git push origin master
