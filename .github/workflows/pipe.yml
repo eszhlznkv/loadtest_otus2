@@ -10,7 +10,7 @@ jobs:
   loadtest:
     name: k6 local test run 
     runs-on: ubuntu-latest
-    container: docker://loadimpact/k6:latest
+    # container: docker://loadimpact/k6:latest
   
     steps:
 
