@@ -31,7 +31,7 @@ export let options = {
     },
     discardResponseBodies: true,
     thresholds: {
-        'http_req_duration': ['p(95)<25', 'p(99)<35'],
+        'http_req_duration': ['p(95)<2500', 'p(99)<3500'],
 
     },
 };
