@@ -50,5 +50,5 @@ export function root() {
 // git init
 // git add file
 // git commit -m "sdsd"
-// git remote add origin ssh:git@github.com:eszhlznkv/loadtest_otus2.git
+// git remote add origin ssh:git@github.com-otus:eszhlznkv/loadtest_otus2.git
 // git push origin master
